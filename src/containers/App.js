@@ -9,8 +9,8 @@ import Menu from '../components/Menu'
 class App extends React.Component {
 
     componentDidMount() {
-        const {dispatch, selectedMenu} = this.props
-        dispatch(fetchCoursesIfNeeded(selectedMenu))
+        const {dispatch} = this.props
+        dispatch(selectMenu(this.props.restaurants[0]))
     }
 
     componentWillReceiveProps(nextProps) {
@@ -25,11 +25,12 @@ class App extends React.Component {
     }
 
     render() {
-        const {courses, selectedMenu, isFetching} = this.props
+        const {courses, selectedMenu, isFetching, restaurants, area} = this.props
         const empty = courses.length === 0
         return (
             <div>
-                <MenuTitle options={['Bittipannu', 'Radis', 'Fuuga']} active={selectedMenu} onClick={this.handleClick} />
+                <h1 className="areaTitle">{area}</h1>
+                <MenuTitle options={restaurants} active={selectedMenu} onClick={this.handleClick} />
                 {empty ?
                 (isFetching ? <h2>Ladataan...</h2> : <h2>Ei ruokalistaa</h2>) 
                 : <Menu courses={courses} />}
@@ -41,8 +42,7 @@ class App extends React.Component {
 function mapStateToProps(state) {
     const {selectedMenu, coursesByMenu} = state
 
-    const {meta, courses, isFetching} = coursesByMenu[selectedMenu] || {
-        meta: {},
+    const {courses, isFetching} = coursesByMenu[selectedMenu] || {
         courses: [],
         isFetching: false
     }
@@ -50,8 +50,7 @@ function mapStateToProps(state) {
     return {
         selectedMenu,
         courses,
-        isFetching,
-        meta
+        isFetching
     }
 }
 

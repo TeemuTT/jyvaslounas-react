@@ -1,5 +1,6 @@
 import axios from 'axios'
-import {menuIds} from './menuIds'
+import {generateURL} from './urls'
+import {parseMenu} from './menuParser'
 
 export const REQUEST_MENU = "REQUEST_MENU"
 
@@ -25,8 +26,7 @@ export function receiveMenu(menu, json) {
     return {
         type: RECEIVE_MENU,
         menu,
-        meta: json.data.meta,
-        courses: json.data.courses
+        courses: json.courses
     }
 }
 
@@ -42,15 +42,11 @@ export function selectMenu(menu) {
 function fetchCourses(menu) {
     return function (dispatch) {
         dispatch(requestMenu(menu))
-        const menuId = menuIds[menu]
-        const date = new Date()
-        const day = date.getDate()
-        const month = date.getMonth() + 1
-        const year = date.getFullYear()
-        const url = `https://cors-anywhere.herokuapp.com/http://www.sodexo.fi/ruokalistat/output/daily_json/${menuId}/${year}/${month}/${day}/fi`
+        const url = generateURL(menu)
         return axios.get(url)
             .then(response => {
-                dispatch(receiveMenu(menu, response))
+                const menuJson = parseMenu(response.data)
+                dispatch(receiveMenu(menu, menuJson))
             })
     }
 }

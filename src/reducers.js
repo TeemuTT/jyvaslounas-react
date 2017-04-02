@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import {SELECT_MENU, REQUEST_MENU, RECEIVE_MENU} from './actions'
 
-function selectedMenu(state = "Bittipannu", action) {
+function selectedMenu(state = "none", action) {
     switch (action.type) {
         case SELECT_MENU:
             return action.menu
@@ -23,7 +23,6 @@ function coursesByMenu(state = {}, action) {
 }
 
 const initialCoursesState = {
-    meta: {},
     courses: [],
     isFetching: false
 }
@@ -36,7 +35,6 @@ function courses(state = initialCoursesState, action) {
             })
         case RECEIVE_MENU:
             return Object.assign({}, state, {
-                meta: action.meta,
                 courses: action.courses,
                 isFetching: false
             })
