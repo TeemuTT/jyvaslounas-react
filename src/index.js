@@ -4,7 +4,7 @@ import {render} from 'react-dom'
 import {createStore, applyMiddleware, compose} from 'redux'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-// import {createLogger} from 'redux-logger'
+import {createLogger} from 'redux-logger'
 
 import {rootReducer} from './reducers'
 
@@ -12,7 +12,7 @@ import App from './containers/App'
 
 import './index.css'
 
-// const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -20,7 +20,8 @@ const jamkStore = createStore(
     rootReducer,
     composeEnhancers(
         applyMiddleware(
-            thunkMiddleware
+            thunkMiddleware,
+            loggerMiddleware
         )
     )
 )

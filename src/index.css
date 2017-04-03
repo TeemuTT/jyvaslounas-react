@@ -10,7 +10,7 @@
     float: left;
     padding: 8px;
     margin: 10px;
-    max-width: 30%;
+    width: 30%;
     border: 1px solid black;
     box-shadow: 1px 1px 5px darkslategray;
     border-radius: 2px;
@@ -70,4 +70,21 @@ a, a:visited {
     padding-bottom: 3px;
     margin-bottom: 10px;
     border-bottom: 1px solid gray;
+}
+
+@media screen and (max-width: 1024px) {
+    .appContainer {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .appContainer {
+        width: 90%;
+    }
+}
+
+.errorMsg {
+    color: red;
+    padding-bottom: 10px;
 }

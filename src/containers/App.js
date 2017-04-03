@@ -20,17 +20,19 @@ class App extends React.Component {
         }
     }
 
-    handleClick = nextMenu => {
+    handleClick = (e, nextMenu) => {
+        e.preventDefault() // Prevent scroll up when clicking on link.
         this.props.dispatch(selectMenu(nextMenu))
     }
 
     render() {
-        const {courses, selectedMenu, isFetching, restaurants, area} = this.props
+        const {courses, selectedMenu, isFetching, restaurants, area, errorMessage} = this.props
         const empty = courses.length === 0
         return (
             <div>
                 <h1 className="areaTitle">{area}</h1>
                 <MenuTitle options={restaurants} active={selectedMenu} onClick={this.handleClick} />
+                <span className="errorMsg">{errorMessage}</span>
                 {empty ?
                 (isFetching ? <h2>Ladataan...</h2> : <h2>Ei ruokalistaa</h2>) 
                 : <Menu courses={courses} />}
@@ -40,7 +42,7 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {selectedMenu, coursesByMenu} = state
+    const {selectedMenu, coursesByMenu, errorMessage} = state
 
     const {courses, isFetching} = coursesByMenu[selectedMenu] || {
         courses: [],
@@ -50,7 +52,8 @@ function mapStateToProps(state) {
     return {
         selectedMenu,
         courses,
-        isFetching
+        isFetching,
+        errorMessage
     }
 }
 

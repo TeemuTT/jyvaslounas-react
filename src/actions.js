@@ -39,6 +39,16 @@ export function selectMenu(menu) {
     }
 }
 
+export const ERROR_FETCH_MENU = "ERROR_FETCH_MENU"
+
+export function sendErrorMessage(error, menu) {
+    return {
+        type: ERROR_FETCH_MENU,
+        menu,
+        error
+    }
+}
+
 function fetchCourses(menu) {
     return function (dispatch) {
         dispatch(requestMenu(menu))
@@ -47,6 +57,9 @@ function fetchCourses(menu) {
             .then(response => {
                 const menuJson = parseMenu(response.data)
                 dispatch(receiveMenu(menu, menuJson))
+            })
+            .catch(error => {
+                dispatch(sendErrorMessage(error.message, menu))
             })
     }
 }
@@ -59,7 +72,9 @@ function shouldFetchCourses(state, menu) {
     if (courses.isFetching) {
         return false
     }
-    return false
+    else {
+        return courses.invalidated
+    }
 }
 
 export function fetchCoursesIfNeeded(menu) {
